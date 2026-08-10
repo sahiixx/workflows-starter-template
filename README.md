@@ -1,39 +1,102 @@
-# Cloudflare Workflows Starter Template
+# workflows-starter-template
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/workflows-starter-template)
+![Node](https://img.shields.io/badge/node-20+-green)
 
-<!-- dash-content-start -->
+A real-time, interactive demonstration of [Cloudflare Workflows](https://developers.cloudflare.com/workflows) with live updates via WebSockets and Durable Objects. This template showcases durable multi-step workflows wit
 
-A real-time, interactive demonstration of [Cloudflare Workflows](https://developers.cloudflare.com/workflows) with live updates via WebSockets and Durable Objects. This template showcases durable multi-step workflows with time-based delays, event-driven pauses, and real-time status visualization.
+## Table of Contents
 
-<!-- dash-content-end -->
+- [Overview](#overview)
+- [Quick Start](#quick-start)
+- [Model Routing](#model-routing)
+- [Project Layout](#project-layout)
+- [Development](#development)
+- [Related Repositories](#related-repositories)
 
-![Cloudflare Workflows Starter Template](assets/template-screenshot.png)
+## Overview
 
-## Getting Started
+A real-time, interactive demonstration of [Cloudflare Workflows](https://developers.cloudflare.com/workflows) with live updates via WebSockets and Durable Objects. This template showcases durable multi-step workflows wit
 
-### Installation
+| | |
+|---|---|
+| **Stack** | node |
+| **Frameworks** | react |
+| **Tests** | yes |
+| **Commits** | 2 |
+| **Last activity** | 2026-08-10 |
+| **Visibility** | public |
+
+## Quick Start
+
+### Install
 
 ```bash
 npm install
 ```
 
-### Development
+### Run
 
 ```bash
 npm run dev
 ```
 
-Visit `http://localhost:5173` to see the interactive demo.
+## Model Routing
 
-### Deployment
+Agent work in this repo routes through Azure AI Foundry. See [`AGENTS.md`](./AGENTS.md)
+for the full contract.
+
+| Purpose | Deployment | Endpoint |
+|---|---|---|
+| Default / general | `gpt-5.6-sol` | `/openai/v1/chat/completions` |
+| Deep reasoning | `claude-opus-5` | `/openai/v1/responses` **only** |
+| Embeddings | `text-embedding-3-small` | `/openai/v1/embeddings` |
 
 ```bash
-npm run deploy
+export AZURE_FOUNDRY_API_KEY=...        # never commit this
+export AZURE_FOUNDRY_BASE_URL=https://<resource>.openai.azure.com/openai/v1
 ```
 
-## Learn More
+> **Gotcha:** Claude deployments on Azure return `404 api_not_supported` on
+> `/chat/completions`. They answer **only** via the Responses API.
 
-- [Cloudflare Workflows Documentation](https://developers.cloudflare.com/workflows)
-- [Durable Objects Documentation](https://developers.cloudflare.com/durable-objects)
-- [Workers Documentation](https://developers.cloudflare.com/workers)
+## Project Layout
+
+```
+AGENTS.md
+README.md
+assets/
+eslint.config.js
+index.html
+package-lock.json
+package.json
+src/
+tailwind.config.js
+test/
+tsconfig.app.json
+tsconfig.json
+tsconfig.node.json
+tsconfig.worker.json
+```
+
+## Development
+
+```bash
+# lint / format before committing
+npm run lint
+
+# run the CI check locally
+gh workflow run hermes-azure-check.yml
+```
+
+Secrets live in environment variables and CI secrets — never in tracked files.
+
+## Related Repositories
+
+Part of a 84-repository workspace sharing one agentic contract:
+
+- **[agentic-harness](https://github.com/sahiixx/agentic-harness)** — patterns, contracts, and reference implementations
+- `AGENTS.md` in every repo pins identical model routing
+
+---
+
+<sub>README maintained by the agentic harness · last regenerated 2026-08-10</sub>
